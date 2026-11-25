@@ -19,11 +19,11 @@ repositories:
   loja-product: artifact
   loja-checkout-api: production
 
-# Papéis que a squad não tem. Vazios de propósito: caminho sensível (R3) bloqueia até alguém de fora da squad
-# assumir o papel, e mudança nesta política exige Security e Platform.
+# Platform é o TL, como é comum em empresa pequena. Os demais ficam vazios de propósito: caminho sensível (R3)
+# bloqueia até alguém de Security de fora da squad assumir o papel, e mudança nesta política exige Security.
 roles:
   security: []
-  platform: []
+  platform: [github:missiodev]
   sre: []
   testing: []
   ic: []
