@@ -1,0 +1,66 @@
+# Política da empresa (nível E) da organização de teste. Produto e squad só apertam.
+level: company
+name: aipdlc-policies
+
+profile: base
+perimeter:
+  squads: [checkout]
+  boundary: []
+usesG0: false
+
+# Organização gratuita: o audit log não informa o tipo de acesso das reviews, então a medida é a política de
+# tokens, com detecção amostral (CC-03-03 não aplicável).
+approvalChannel: token-policy
+
+repositories:
+  aipdlc-policies: governance
+  loja-policies: governance
+  checkout-policies: governance
+  loja-product: artifact
+  loja-checkout-api: production
+
+# Papéis que a squad não tem. Vazios de propósito: caminho sensível (R3) bloqueia até alguém de fora da squad
+# assumir o papel, e mudança nesta política exige Security e Platform.
+roles:
+  security: []
+  platform: []
+  sre: []
+  testing: []
+  ic: []
+
+trustedBuilders: [aipdlc-checks/.github/workflows/build.yml]
+verificationSigners: [verification-env]
+nonRuntimePaths: [docs/, acceptance/, test/, tests/]
+
+riskMap:
+  - { path: "**/auth/**", class: R3, requiredRole: security }
+  - { path: "**/iam/**", class: R3, requiredRole: security }
+  - { path: "**/migrations/**", class: R3, requiredRole: security }
+  - { path: ".github/workflows/**", class: R3, requiredRole: platform }
+  - { path: ".github/actions/**", class: R3, requiredRole: platform }
+  - { path: "CODEOWNERS", class: R3, requiredRole: platform }
+
+quorum:
+  G3: { R1: 1, R2: 2, R3: 2 }
+
+sla:
+  G1: 1d
+  G2: 1d
+  G3: 4h
+  G4: 4h
+  risk-acceptance: 2h
+
+riskAcceptance:
+  enabledRules: [CORE-15, policy:change-window, policy:sla]
+  maxValidityBusinessDays: 5
+  monthlyLimitPerComponent: 2
+
+additionalGates: []
+
+# Squad reduzida: PO, TL e DEV (spec 7.4)
+reducedSquads:
+  checkout: { approvers: [github:gabrielmissio, github:missiodev, github:PedroLeale] }
+reducedSquadPolicy:
+  maxApprovers: 3
+  auditRate: 0.2
+  auditMinPerMonth: 5
